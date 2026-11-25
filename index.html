@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="SI-JADIN — Sistem Informasi Perjalanan Dinas BKAD &amp; BKPSDM Kabupaten Cianjur: Surat Tugas, SPD, rincian biaya, kuitansi, SPJ, dan sisa pagu.">
+  <meta name="theme-color" content="#1B4332">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SI-JADIN">
+  <title>SI-JADIN — Sistem Informasi Perjalanan Dinas</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400..500,0..1,0&display=block" rel="stylesheet">
+  <script>try{var t=localStorage.getItem('sj_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="topbar-progress" aria-hidden="true"></div>
+
+  <!-- Splash: hanya sekejap; data dimuat dari cache lokal bila ada -->
+  <div id="splash" role="status" aria-live="polite">
+    <div class="splash-mark"><div class="logo-mark"><span class="ms">flight_takeoff</span></div><div class="spin"></div><span class="small">Memuat SI-JADIN…</span></div>
+  </div>
+
+  <!-- ============ LOGIN ============ -->
+  <section id="screen-login" class="screen-center" hidden>
+    <div class="login-hero">
+      <div>
+        <div class="row gap12"><div class="logo-mark"><span class="ms">flight_takeoff</span></div><div><div class="bb" style="color:#fff;font-size:18px">SI-JADIN</div><div class="xs" style="color:#A5D0B9;letter-spacing:.06em">BKAD · BKPSDM KABUPATEN CIANJUR</div></div></div>
+        <h1>Administrasi perjalanan dinas, dari Surat Tugas sampai SPJ, dalam hitungan menit.</h1>
+        <p>Surat Tugas, SPD, rincian biaya, kuitansi per komponen, verifikasi SPJ, dan sisa pagu terpantau di satu tempat — mengikuti templat resmi instansi.</p>
+      </div>
+      <div class="hero-feats">
+        <div class="hero-feat"><span class="ms">tag</span><div>Nomor dokumen otomatis &amp; terkunci — tidak pernah ganda.</div></div>
+        <div class="hero-feat"><span class="ms">calculate</span><div>Rincian &amp; terbilang otomatis sesuai SBU berlaku.</div></div>
+        <div class="hero-feat"><span class="ms">fact_check</span><div>Checklist kelengkapan SPJ sebelum verifikasi.</div></div>
+        <div class="hero-feat"><span class="ms">account_balance_wallet</span><div>Sisa pagu diperbarui setiap SPJ diverifikasi.</div></div>
+      </div>
+      <div class="hero-ring"></div>
+    </div>
+    <div class="login-pane">
+      <form class="login-card" id="login-form" autocomplete="on" novalidate>
+        <div class="row gap12 show-m"><div class="logo-mark"><span class="ms">flight_takeoff</span></div><div><div class="bb lg-t">SI-JADIN</div><div class="xs muted">Sistem Informasi Perjalanan Dinas</div></div></div>
+        <h2>Masuk ke akun Anda</h2>
+        <p class="muted" style="margin:0 0 20px" id="login-sub">Gunakan nama pengguna atau NIP yang terdaftar.</p>
+        <div class="col gap16">
+          <div class="field"><label for="lg-user">Nama pengguna / NIP</label>
+            <div class="inp-ic"><span class="ms">person</span><input class="inp" id="lg-user" name="username" autocomplete="username" required autocapitalize="none" spellcheck="false"></div></div>
+          <div class="field"><label for="lg-pass">Kata sandi</label>
+            <div class="inp-ic" style="position:relative"><span class="ms">lock</span><input class="inp" id="lg-pass" name="password" type="password" autocomplete="current-password" required style="padding-right:44px">
+              <button type="button" class="btn ghost icon" id="lg-eye" aria-label="Tampilkan kata sandi" style="position:absolute;right:2px;top:2px;min-height:34px"><span class="ms">visibility</span></button></div></div>
+          <div class="err small" id="lg-err" role="alert" style="color:var(--bad)"></div>
+          <button class="btn pri lg block" id="lg-btn" type="submit"><span class="ms">login</span> Masuk</button>
+        </div>
+        <div id="demo-box" hidden class="mt24">
+          <div class="label" id="demo-lbl">Akun contoh</div>
+          <div class="demo-acc" id="demo-acc"></div>
+        </div>
+        <p class="xs muted mt24">© Pemerintah Kabupaten Cianjur · SI-JADIN v3.1 · Pengembangan e-SPPD / SI-STAMP</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ VERIFIKASI PUBLIK (QR) ============ -->
+  <section id="screen-verify" class="ver-wrap" hidden></section>
+
+  <!-- ============ APLIKASI ============ -->
+  <div id="screen-app" class="app" hidden>
+    <aside id="sidebar" aria-label="Navigasi utama">
+      <div class="side-brand">
+        <div class="logo-mark" style="width:38px;height:38px"><span class="ms">flight_takeoff</span></div>
+        <div class="bt"><div class="t1" id="brand-name">SI-JADIN</div><div class="t2">BKAD / BKPSDM Cianjur</div></div>
+      </div>
+      <div class="side-sec">Navigasi Utama</div>
+      <nav class="side-nav" id="side-nav"></nav>
+      <div class="side-foot">
+        <div class="side-user"><div class="avatar gold" id="side-av">--</div><div class="who grow"><div class="nm trunc" id="side-nm"></div><div class="rl trunc" id="side-rl"></div></div></div>
+        <button class="nav-a" data-act="auth.logout" style="justify-content:center;background:rgba(186,26,26,.15);color:#FFDAD6;border-radius:8px;border-left:0"><span class="ms">logout</span><span class="lbl">Keluar</span></button>
+      </div>
+    </aside>
+    <div id="scrim" data-act="ui.drawer"></div>
+    <div class="main-col">
+      <header id="topbar">
+        <button class="icon-btn" id="hamb" data-act="ui.drawer" aria-label="Buka menu"><span class="ms">menu</span></button>
+        <button class="icon-btn show-m" id="btn-back" data-act="ui.back" aria-label="Kembali" hidden><span class="ms">arrow_back</span></button>
+        <div class="crumb"><span class="c1" id="crumb-pemda">Pemerintah Kab. Cianjur</span><span class="sep">/</span><span class="c2" id="crumb-page">Dashboard</span></div>
+        <div class="top-actions">
+          <div class="seg hide-m" id="opd-switch" role="tablist" aria-label="Pilih OPD"></div>
+          <select class="sel hide-m" id="year-sel" aria-label="Tahun anggaran" style="width:auto;min-height:36px"></select>
+          <div style="position:relative"><button class="icon-btn" data-act="ui.notif" aria-label="Pemberitahuan"><span class="ms">notifications</span><span class="dot" id="notif-dot" hidden></span></button><div id="notif-menu"></div></div>
+          <button class="icon-btn" data-act="ui.theme" aria-label="Ganti tema terang/gelap"><span class="ms" id="theme-ic">dark_mode</span></button>
+          <div style="position:relative"><button class="icon-btn" data-act="ui.user" aria-label="Menu akun" style="background:none;width:auto;padding:0"><span class="avatar" id="top-av">--</span></button><div id="user-menu"></div></div>
+        </div>
+      </header>
+      <main id="main">
+        <section class="page" id="page-dashboard"></section>
+        <section class="page" id="page-st"></section>
+        <section class="page" id="page-spd"></section>
+        <section class="page" id="page-rincian"></section>
+        <section class="page" id="page-kuitansi"></section>
+        <section class="page" id="page-spj"></section>
+        <section class="page" id="page-anggaran"></section>
+        <section class="page" id="page-rekap"></section>
+        <section class="page" id="page-crm"></section>
+        <section class="page" id="page-pengaturan"></section>
+        <section class="page" id="page-profil"></section>
+      </main>
+    </div>
+    <nav id="bottomnav" aria-label="Navigasi bawah"></nav>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast-root" role="status" aria-live="polite"></div>
+  <div id="print-root"></div>
+  <input type="file" id="file-pick" hidden>
+
+  <!-- Pustaka grafik (dimuat paralel; dasbor menunggu bila belum siap) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" async></script>
+  <!-- Urutan wajib: konfigurasi API → modul bersama → aplikasi -->
+  <script src="js/config.js" defer></script>
+  <script src="js/dokumen.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
